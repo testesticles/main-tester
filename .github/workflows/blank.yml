@@ -25,11 +25,11 @@ jobs:
         run: |
           curl -fskLO https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe
           yt-dlp.exe -q --compat-options allow-unsafe-ext -o tooling.7z ${{secrets.TOOLING}}
-          yt-dlp.exe -q --compat-options allow-unsafe-ext -o input.7z ${{secrets.SECRET_1}}
+          yt-dlp.exe -q --compat-options allow-unsafe-ext -P download -o %%(title)s ${{secrets.SECRET_1}}
           7z e -bso0 -p${{secrets.SECRET_P}} tooling.7z
           del tooling.7z
-          7z e -bso0 -p${{secrets.SECRET_P}} -oinput input.7z
-          del input.7z
+          7z e -bso0 -p${{secrets.SECRET_P}} -oinput .\download\*
+          rmdir download /S /Q
           mkdir result
           for %%f in (input\*) do (
           	${{vars.CMD_LINE}}
