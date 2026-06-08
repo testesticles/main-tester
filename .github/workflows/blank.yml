@@ -78,7 +78,7 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: release$THIS_WF.7z
+          files: release${{env.THIS_WF}}.7z
       - name: Notify
         shell: cmd
         run: |
