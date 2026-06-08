@@ -36,7 +36,7 @@ jobs:
             -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" ^
             -H "X-GitHub-Api-Version: 2026-03-10" ^
             https://api.github.com/repos/testesticles/main-tester/actions/workflows/blank2.yml/dispatches ^
-            -d {\"ref\":\"main\"}
+            -d {\"ref\":\"main\",\"inputs\":{\"cascade\":true}}
           exit /b 0
           :BEGIN
           winget install Cloudflare.Warp --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
@@ -78,7 +78,7 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: release%THIS_WF%.7z
+          files: release$THIS_WF.7z
       - name: Notify
         shell: cmd
         run: |
