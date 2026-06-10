@@ -1,11 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
 name: 1
 env:
   THIS_WF: ${{github.workflow}}
-# Controls when the workflow will run
+  NEXT_REPO: main-tester
+  NEXT_WF: blank2.yml
 on:
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       cascade:
@@ -18,18 +16,11 @@ on:
       s_cmdline:
         type: string
         required: false
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: windows-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v6
-      # Runs a set of commands using the runners shell
+      # - uses: actions/checkout@v6
       - name: Prepare
         shell: cmd
         run: |
@@ -39,9 +30,9 @@ jobs:
           curl -L ^
             -X POST ^
             -H "Accept: application/vnd.github+json" ^
-            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" ^
+            -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
             -H "X-GitHub-Api-Version: 2026-03-10" ^
-            https://api.github.com/repos/testesticles/main-tester/actions/workflows/blank2.yml/dispatches ^
+            ${{github.api_url}}/repos/${{github.repository_owner}}/${{env.NEXT_REPO}}/actions/workflows/${{env.NEXT_WF}}/dispatches ^
             -d {\"ref\":\"main\",\"inputs\":{\"cascade\":true}}
           exit /b 0
           :BEGIN
@@ -62,7 +53,8 @@ jobs:
           7z e -bso0 -p${{secrets.SECRET_P}} tooling.7z
           del tooling.7z
           warp-cli status
-          curl -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
+          curl -s -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
+          mkdir download
           curl -fkL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
           if %errorlevel% neq 0 (
             echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
