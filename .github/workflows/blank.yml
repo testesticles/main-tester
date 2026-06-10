@@ -57,7 +57,7 @@ jobs:
           mkdir download
           curl -fkL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
           if %errorlevel% neq 0 (
-            echo [91mDownloading failed[0m
+            echo Downloading failed
             echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             call :RUN_NEXT
             exit 1 
