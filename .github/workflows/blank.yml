@@ -12,6 +12,12 @@ on:
         type: boolean
         default: false
         required: false
+      f_cmdline:
+        type: string
+        required: false
+      s_cmdline:
+        type: string
+        required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -39,29 +45,25 @@ jobs:
             -d {\"ref\":\"main\",\"inputs\":{\"cascade\":true}}
           exit /b 0
           :BEGIN
+          winget install Cloudflare.Warp --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
+          set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
+          warp-cli --accept-tos registration new
+          warp-cli --accept-tos mode proxy
+          warp-cli --accept-tos connect
           curl -fsL -o "tooling.7z" ^
             -H "Accept: application/octet-stream" ^
             -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
             -H "X-GitHub-Api-Version: 2026-03-10" ^
             ${{secrets.TOOLING}}
           if %errorlevel% neq 0 (
-            echo Failed downloading tooling
+            echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             exit 1
           )
-          dir
-          exit 0
-          winget install Cloudflare.Warp --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
-          set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
-          warp-cli --accept-tos registration new
-          warp-cli --accept-tos mode proxy
-          warp-cli --accept-tos connect
-          curl -fskLO https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe
-          yt-dlp.exe -q --compat-options allow-unsafe-ext -o tooling.7z ${{secrets.TOOLING}}
           7z e -bso0 -p${{secrets.SECRET_P}} tooling.7z
           del tooling.7z
           warp-cli status
           curl -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
-          yt-dlp.exe -q --compat-options allow-unsafe-ext --proxy socks5://127.0.0.1:40000 -P download -o %%(title)s ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
+          curl -fskL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
           if %errorlevel% neq 0 (
             echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             call :RUN_NEXT
