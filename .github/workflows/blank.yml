@@ -39,6 +39,17 @@ jobs:
             -d {\"ref\":\"main\",\"inputs\":{\"cascade\":true}}
           exit /b 0
           :BEGIN
+          curl -fsL -o "tooling.7z" ^
+            -H "Accept: application/octet-stream" ^
+            -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
+            -H "X-GitHub-Api-Version: 2026-03-10" ^
+            ${{secrets.TOOLING}}
+          if %errorlevel% neq 0 (
+            echo Failed downloading tooling
+            exit 1
+          )
+          dir
+          exit 0
           winget install Cloudflare.Warp --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos registration new
