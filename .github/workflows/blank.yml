@@ -85,7 +85,6 @@ jobs:
           automatic_release_tag: latest
           draft: true
           files: release${{env.THIS_WF}}.7z
-          run: del release${{env.THIS_WF}}.7z
       - name: Notify
         shell: cmd
         run: |
