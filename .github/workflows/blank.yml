@@ -55,8 +55,9 @@ jobs:
           warp-cli status
           curl -s -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
           mkdir download
-          curl -fkL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
+          curl -fkL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
           if %errorlevel% neq 0 (
+            echo [91mDownloading failed[0m
             echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             call :RUN_NEXT
             exit 1 
@@ -84,6 +85,7 @@ jobs:
           automatic_release_tag: latest
           draft: true
           files: release${{env.THIS_WF}}.7z
+          run: del release${{env.THIS_WF}}.7z
       - name: Notify
         shell: cmd
         run: |
