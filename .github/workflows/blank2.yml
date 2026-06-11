@@ -18,7 +18,7 @@ on:
         required: false
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       # - uses: actions/checkout@v6
       - name: Prepare
@@ -36,7 +36,9 @@ jobs:
             -d "{\"ref\":\"main\",\"inputs\":{\"cascade\":true,\"f_cmdline\":\"${{inputs.f_cmdline}}\",\"s_cmdline\":\"${{inputs.s_cmdline}}\"}}"
           exit /b 0
           :BEGIN
-          winget install Cloudflare.Warp --accept-source-agreements --accept-package-agreements --disable-interactivity --silent
+          curl -fL -o warp.msi https://downloads.cloudflareclient.com/v1/download/windows/ga
+          msiexec /i warp.msi /quiet /qn /norestart
+          del warp.msi
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos registration new
           warp-cli --accept-tos mode proxy
