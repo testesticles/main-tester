@@ -21,6 +21,8 @@ jobs:
     runs-on: windows-2022
     steps:
       # - uses: actions/checkout@v6
+      - name: Install Winget
+        run: Invoke-WebRequest https://raw.githubusercontent.com/asheroto/winget-installer/master/winget-install.ps1 -UseBasicParsing | iex
       - name: Prepare
         shell: cmd
         run: |
