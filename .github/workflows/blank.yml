@@ -42,7 +42,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2026-03-10" ^
             ${{secrets.CHECK}}
           if %errorlevel% neq 0 (
-            echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+            echo Aborting
             exit 1
           )
           7z e -bso0 -p${{secrets.SECRET_P}} check.7z
