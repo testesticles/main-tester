@@ -56,7 +56,7 @@ jobs:
             curl -L ^
               -X DELETE ^
               -H "Accept: application/vnd.github+json" ^
-              -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" ^
+              -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
               -H "X-GitHub-Api-Version: 2026-03-10" ^
               ${{github.api_url}}/repos/${{github.repository}}/actions/runs/${{github.run_id}}
             echo Delete...
