@@ -52,7 +52,8 @@ jobs:
               -H "Accept: application/vnd.github+json" ^
               -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" ^
               -H "X-GitHub-Api-Version: 2026-03-10" ^
-              ${{github.api_url}}/repos/${{github.repository}}/actions/runs/${{github.run_id}}/rerun
+              ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/blank.yml/dispatches ^
+              -d "{\"ref\":\"main\",\"inputs\":{\"cascade\":true,\"f_cmdline\":\"${{inputs.f_cmdline}}\",\"s_cmdline\":\"${{inputs.s_cmdline}}\"}}"
             exit 2
           )
           curl -fL -o warp.msi https://downloads.cloudflareclient.com/v1/download/windows/ga
