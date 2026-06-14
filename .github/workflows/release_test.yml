@@ -18,5 +18,6 @@ jobs:
         with:
           draft: true
           overwrite_files: false
+          name:
           tag_name: ${{github.run_id}}_${{github.run_attempt}}
           files: "*.7z"
