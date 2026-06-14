@@ -103,7 +103,6 @@ jobs:
             set "OUT_NAME=!OUT_NAME!_%%~nf"
             del "%%f"
           )
-          powershell echo "FULL_NAME=$THIS_WF$OUT_NAME$.7z >> "$GITHUB_ENV"
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos connect
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %THIS_WF%%OUT_NAME%.7z .\result\*
@@ -114,7 +113,7 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: ${{env.FULL_NAME}}
+          files: *.7z
       - name: Notify
         shell: cmd
         run: |
