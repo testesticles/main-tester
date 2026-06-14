@@ -113,7 +113,7 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: *.7z
+          files: "*.7z"
       - name: Notify
         shell: cmd
         run: |
