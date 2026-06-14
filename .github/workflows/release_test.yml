@@ -17,4 +17,5 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           draft: true
+          overwrite_files: false
           files: "*.7z"
