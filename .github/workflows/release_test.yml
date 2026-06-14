@@ -8,10 +8,12 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Step 1
+        shell: cmd
         run: |
           echo "MY_VAR=MY_VAR_DATA" >> "%GITHUB_ENV%"
           echo "MY_VAR2=MY_VAR2_DATA" >> "%GITHUB_ENV%"
       - name: Step 2
+        shell: cmd
         run: |
           echo %MY_VAR%
           echo %MY_VAR2%
