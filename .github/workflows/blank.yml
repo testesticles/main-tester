@@ -105,13 +105,12 @@ jobs:
           )
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos connect
-          7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %THIS_WF%%OUT_NAME%.7z .\result\*
+          7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME%.7z .\result\*
           rmdir result /S /Q
       - name: Finish
         uses: marvinpinto/action-automatic-releases@v1.2.1
         with:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
-          automatic_release_tag: latest
           draft: true
           files: "*.7z"
       - name: Notify
