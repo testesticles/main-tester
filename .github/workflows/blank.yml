@@ -107,13 +107,14 @@ jobs:
           warp-cli --accept-tos connect
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME:~1%.7z .\result\*
           rmdir result /S /Q
-      - name: Finish
-        uses: marvinpinto/action-automatic-releases@v1.2.1
-        with:
-          repo_token: "${{secrets.GITHUB_TOKEN}}"
-          automatic_release_tag: latest
-          draft: true
-          files: "*.7z"
+          gh release create -d *.7z
+      # - name: Finish
+      #   uses: marvinpinto/action-automatic-releases@v1.2.1
+      #   with:
+      #     repo_token: "${{secrets.GITHUB_TOKEN}}"
+      #     automatic_release_tag: latest
+      #     draft: true
+      #     files: "*.7z"
       - name: Notify
         shell: cmd
         run: |
