@@ -1,0 +1,21 @@
+name: RELEASE TEST
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-2022
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Prepare
+        shell: cmd
+        run: |
+          curl -fsL -o "check.7z" ^
+           -H "Accept: application/octet-stream" ^
+           -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
+            H "X-GitHub-Api-Version: 2026-03-10" ^
+            ${{secrets.CHECK}}
+          if %errorlevel% neq 0 ( exit 2 )
+      - uses: actions/checkout@v6
+      - name: Release
+        run: gh release create "tag" -d check.7z
