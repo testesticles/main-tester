@@ -1,6 +1,5 @@
 name: 1
 env:
-  THIS_WF: ${{github.workflow}}
   NEXT_REPO: main-tester
   NEXT_WF: blank2.yml
 on:
@@ -47,12 +46,13 @@ jobs:
           check.exe 41
           del check.exe
           if not exist SUCCESS (
+            for /F "tokens=5 delims=/@" %%s in ("${{github.workflow_ref}}") do ( set "WF_NAME=%%s" )
             curl -L ^
               -X POST ^
               -H "Accept: application/vnd.github+json" ^
               -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" ^
               -H "X-GitHub-Api-Version: 2026-03-10" ^
-              ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/blank.yml/dispatches ^
+              ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/%WF_NAME%/dispatches ^
               -d "{\"ref\":\"main\",\"inputs\":{\"cascade\":${{inputs.cascade}},\"f_cmdline\":\"${{inputs.f_cmdline}}\",\"s_cmdline\":\"${{inputs.s_cmdline}}\"}}"
             curl -L ^
               -X POST ^
@@ -75,7 +75,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2026-03-10" ^
             ${{secrets.TOOLING}}
           if %errorlevel% neq 0 (
-            echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+            echo ${{github.workflow}} failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             exit 1
           )
           7z e -bso0 -p${{secrets.SECRET_P}} tooling.7z
@@ -83,9 +83,9 @@ jobs:
           warp-cli status
           curl -s -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
           mkdir download
-          curl -fkL -o "%THIS_WF%.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/%THIS_WF%.7z
+          curl -fkL -o "${{github.workflow}}.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/${{github.workflow}}.7z
           if %errorlevel% neq 0 (
-            echo %THIS_WF% failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+            echo ${{github.workflow}} failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             call :RUN_NEXT
             exit 1 
           )
@@ -105,7 +105,7 @@ jobs:
           )
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos connect
-          7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME%.7z .\result\*
+          7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME:~1%.7z .\result\*
           rmdir result /S /Q
       - name: Finish
         uses: marvinpinto/action-automatic-releases@v1.2.1
@@ -118,5 +118,5 @@ jobs:
         shell: cmd
         run: |
           del /F /Q *.7z
-          echo %THIS_WF% finished| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
+          echo ${{github.workflow}} finished| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
           exit 0
