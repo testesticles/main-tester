@@ -114,7 +114,7 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: ${FULL_NAME}
+          files: ${{env.FULL_NAME}}
       - name: Notify
         shell: cmd
         run: |
