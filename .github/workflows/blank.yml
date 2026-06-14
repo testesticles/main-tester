@@ -100,10 +100,10 @@ jobs:
           mkdir result
           for %%f in (input\*) do (
           	start "" /BELOWNORMAL /WAIT /B cmd /c kekw.exe -hide_banner -loglevel error -i "%%f" -map 0:v:0 -pix_fmt yuv420p -f yuv4mpegpipe ${{inputs.f_cmdline}} - | lolw.exe -i stdin --lookahead 120 --progress 0 -b "result\%%~nf.ivf" --lp 3 --preset 3 --keyint 10s --tune 0 ${{inputs.s_cmdline}}
-            set "OUT_NAME=!OUT_NAME!_%%f"
+            set "OUT_NAME=!OUT_NAME!_%%~nf"
             del "%%f"
           )
-          echo "FULL_NAME=%THIS_WF%%OUT_NAME%.7z > "${{github.env}}"
+          powershell echo "FULL_NAME=$THIS_WF$OUT_NAME$.7z >> "$GITHUB_ENV"
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos connect
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %THIS_WF%%OUT_NAME%.7z .\result\*
@@ -118,6 +118,6 @@ jobs:
       - name: Notify
         shell: cmd
         run: |
-          del %FULL_NAME%
+          del /F /Q *.7z
           echo %THIS_WF% finished| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
           exit 0
