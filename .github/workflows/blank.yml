@@ -111,6 +111,11 @@ jobs:
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME:~1%.7z .\result\*
           rmdir result /S /Q
           gh release create -d *.7z
+      - name: CO
+        uses: actions/checkout@v6
+      - name: Release
+        run: gh release create -d *.7z
+        
       # - name: Finish
       #   uses: marvinpinto/action-automatic-releases@v1.2.1
       #   with:
