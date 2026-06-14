@@ -10,8 +10,10 @@ jobs:
       - name: Step 1
         shell: cmd
         run: |
-          echo MY_VAR=MY_VAR_DATA >> %GITHUB_%ENV%
+          echo MY_VAR=MY_VAR_DATA >> "%GITHUB_%ENV%"
+          echo "MY_VAR2=MY_VAR2_DATA" >> "%GITHUB_%ENV%"
       - name: Step 2
         shell: cmd
         run: |
           echo %MY_VAR%
+          echo %MY_VAR2%
