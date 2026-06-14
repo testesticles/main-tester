@@ -10,9 +10,8 @@ jobs:
       - name: Step 1
         shell: cmd
         run: |
-          set "PATH=%PATH%;C:\MORE"
-          echo "PATH=%PATH%" >> %GITHUB_%ENV%
+          echo "MY_VAR=MY_VAR_DATA" >> %GITHUB_%ENV%
       - name: Step 2
         shell: cmd
         run: |
-          echo %PATH%
+          echo %MY_VAR%
