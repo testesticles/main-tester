@@ -19,6 +19,8 @@ on:
 jobs:
   build:
     runs-on: windows-2022
+    env:
+      OUT_NAME:
     steps:
       # - uses: actions/checkout@v6
       - name: Prepare
@@ -103,6 +105,7 @@ jobs:
             set "OUT_NAME=!OUT_NAME!_%%f"
             del "%%f"
           )
+          
           set "PATH=%PATH%;C:\Program Files\Cloudflare\Cloudflare WARP"
           warp-cli --accept-tos connect
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %THIS_WF%%OUT_NAME%.7z .\result\*
@@ -113,10 +116,10 @@ jobs:
           repo_token: "${{secrets.GITHUB_TOKEN}}"
           automatic_release_tag: latest
           draft: true
-          files: release${{env.THIS_WF}}.7z
+          files: ${{env.THIS_WF}}${{env.OUT_NAME}}.7z
       - name: Notify
         shell: cmd
         run: |
-          del release${{env.THIS_WF}}${{env.OUT_NAME}}.7z
+          del ${{env.THIS_WF}}${{env.OUT_NAME}}.7z
           echo %THIS_WF% finished| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
           exit 0
