@@ -11,7 +11,7 @@ jobs:
         shell: cmd
         run: |
           echo BLAH > blah.txt
-          7z a-sdel -mx0 -mhe check.7z blah.txt
+          7z a -sdel -mx0 -mhe check.7z blah.txt
           dir
       - uses: actions/checkout@v6
       - name: Release
