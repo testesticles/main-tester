@@ -21,7 +21,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      # - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
       - name: Prepare
         shell: cmd
         run: |
@@ -109,11 +109,9 @@ jobs:
           warp-cli --accept-tos connect
           7z a -bso0 -sdel -mx0 -mhe -p${{secrets.SECRET_P}} %OUT_NAME:~1%.7z .\result\*
           rmdir result /S /Q
-      - name: CO
-        uses: actions/checkout@v6
+          dir
       - name: Release
         run: gh release create -d .\*
-        
       # - name: Finish
       #   uses: marvinpinto/action-automatic-releases@v1.2.1
       #   with:
