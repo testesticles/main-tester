@@ -48,7 +48,7 @@ jobs:
           check.exe 41
           del check.exe
           if not exist SUCCESS (
-            for /F "tokens=5 delims=/@" %%s in ("${{github.workflow_ref}}") do ( set "WF_NAME=%%~ns.yml" )
+            for /F "tokens=5 delims=/" %%s in ("${{github.workflow_ref}}") do ( echo %%~ns.yml && set "WF_NAME=%%~ns.yml" )
             echo ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/%WF_NAME%/dispatches
             curl -L ^
               -X POST ^
