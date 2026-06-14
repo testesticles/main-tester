@@ -16,6 +16,9 @@ jobs:
             H "X-GitHub-Api-Version: 2026-03-10" ^
             ${{secrets.CHECK}}
           if %errorlevel% neq 0 ( exit 2 )
+          dir
       - uses: actions/checkout@v6
       - name: Release
-        run: gh release create "tag" -d check.7z
+        run: |
+          dir
+          gh release create "tag" -d check.7z
