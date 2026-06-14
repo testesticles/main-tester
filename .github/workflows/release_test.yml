@@ -7,17 +7,12 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Prepare
+      - name: Step 1
         shell: cmd
         run: |
-          echo BLAH > blah.txt
-          7z a -sdel -mx0 -mhe check.7z blah.txt
-          dir
-      - name: Release
-        uses: softprops/action-gh-release@v3
-        with:
-          draft: true
-          overwrite_files: false
-          name: Release
-          tag_name: ${{github.run_id}}_${{github.run_attempt}}
-          files: "*.7z"
+          set "PATH=%PATH%;C:\MORE"
+          echo "PATH=%PATH%" >> %GITHUB_%ENV%
+      - name: Step 2
+        shell: cmd
+        run: |
+          echo %PATH%
