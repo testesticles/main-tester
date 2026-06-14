@@ -11,8 +11,8 @@ jobs:
         run: |
           echo %GITHUB_ENV%
           echo ${{github.env}}
+          echo "MY_VAR=MY_VAR_DATA" >> ${{github.env}}
           for /F %%l in (%GITHUB_ENV%) do (echo %%l)
-          echo "MY_VAR=MY_VAR_DATA" >> "$GITHUB_ENV"
       - name: Step 2
         shell: cmd
         id: s2
