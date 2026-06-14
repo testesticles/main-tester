@@ -47,10 +47,7 @@ jobs:
           del check.7z
           check.exe 41
           del check.exe
-          set "IS_THIS_BROKEN=TEST"
-          echo ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/%IS_THIS_BROKEN%/dispatches
-          for /F "tokens=5 delims=/" %%s in ("${{github.workflow_ref}}") do ( set "IS_THIS_BROKEN=%%~ns.yml" )
-          echo ${{github.api_url}}/repos/${{github.repository}}/actions/workflows/%IS_THIS_BROKEN%/dispatches
+          for /F "tokens=5 delims=/" %%s in ("${{github.workflow_ref}}") do ( set "WF_NAME=%%~ns.yml" )
           if not exist SUCCESS (
             curl -L ^
               -X POST ^
