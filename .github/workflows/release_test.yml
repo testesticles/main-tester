@@ -17,6 +17,4 @@ jobs:
         shell: cmd
         id: s2
         run: |
-          echo $MY_VAR
-          echo $MY_VAR2
-          printf '%s\n' "$MY_VAR"
+          echo %MY_VAR%
