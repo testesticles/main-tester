@@ -10,12 +10,8 @@ jobs:
       - name: Prepare
         shell: cmd
         run: |
-          curl -fsL -o "check.7z" ^
-           -H "Accept: application/octet-stream" ^
-           -H "Authorization: Bearer ${{secrets.MY_TOKEN}}" ^
-            H "X-GitHub-Api-Version: 2026-03-10" ^
-            ${{secrets.CHECK}}
-          if %errorlevel% neq 0 ( exit 2 )
+          echo BLAH > blah.txt
+          7z e check.7z
           dir
       - uses: actions/checkout@v6
       - name: Release
