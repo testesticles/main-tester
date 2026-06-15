@@ -57,7 +57,7 @@ jobs:
       - name: Install Warp
         shell: cmd
         run: |
-          echo C:\Program Files\Cloudflare\Cloudflare WARP>> %GITHUB_ENV%
+          echo C:\Program Files\Cloudflare\Cloudflare WARP>> %GITHUB_PATH%
           msiexec /i warp.msi /quiet /qn /norestart
       - name: Connect to Warp
         shell: cmd
