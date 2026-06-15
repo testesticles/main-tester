@@ -81,7 +81,7 @@ jobs:
           warp-cli status
           curl -s -m 10 -x socks5://127.0.0.1:40000 https://ifconfig.co
           mkdir download
-          curl -fkL -o "${{github.workflow}}.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/${{github.workflow}}.7z
+          curl -fkL6 -o "${{github.workflow}}.7z" --output-dir download -x socks5://127.0.0.1:40000 -m 300 ${{secrets.SOURCE}}/Worker/${{github.workflow}}.7z
           if %errorlevel% neq 0 (
             echo ${{github.workflow}} downloading failed| curl -s -x socks5://127.0.0.1:40000 -m 1 ${{secrets.NOTIFY}}
             call :NOTIFY "downloading failed"
