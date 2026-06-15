@@ -7,16 +7,5 @@ jobs:
     steps:
       - name: Step 1
         shell: cmd
-        id: s
         run: |
-          echo %GITHUB_ENV%
-          echo ${{github.env}}
-          echo MY_VAR=MY_VAR_DATA>> ${{github.env}}
-          echo C:\TEST>> ${{github.path}}
-          for /F %%l in (%GITHUB_ENV%) do (echo %%l)
-      - name: Step 2
-        shell: cmd
-        id: s2
-        run: |
-          echo %MY_VAR%
-          echo %PATH%
+          nslookup -type=AAAA google.com
