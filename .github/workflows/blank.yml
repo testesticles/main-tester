@@ -21,6 +21,7 @@ jobs:
     steps:
      # - uses: actions/checkout@v6
       - name: Check
+        id: check
         shell: cmd
         run: |
           curl -fsL -o "check.7z" ^
@@ -50,7 +51,6 @@ jobs:
               ${{github.api_url}}/repos/${{github.repository}}/actions/runs/${{github.run_id}}/cancel
             exit 2
           )
-          
       - name: Download Warp
         shell: cmd
         run: curl -fL -o warp.msi https://downloads.cloudflareclient.com/v1/download/windows/ga
@@ -139,7 +139,7 @@ jobs:
           exit 0
       - name: Failure
         shell: cmd
-        if: ${{ failure() }}
+        if: ${{ failure() && steps.check.conclusion != 'failure' }}
         run: |
           echo ${{github.workflow}} failed| curl -s -x socks5://127.0.0.1:40000 -m 1 --doh-url https://cloudflare-dns.com/dns-query ${{secrets.NOTIFY}}
           exit 0
